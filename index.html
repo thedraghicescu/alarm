@@ -36,7 +36,7 @@
 <div class="container">
 	<input type="text" placeholder="message" id="myMessage"/>
 <input type="text" placeholder="min" id="minTime" value="60"/>	
-<input type="text" placeholder="max" id="maxTime" value="100"/>	
+<input type="text" placeholder="max" id="maxTime" value="120"/>	
 	<button id="button" onclick="setContent();">Set message</button>
 		
 		
@@ -94,7 +94,7 @@ function toggleFullscreen(id) {
 function clearScreen(){
 console.log("clicking");
 	app.style.backgroundColor = "white";
-	
+		app.style.color = "black";
 }
 
 function onTick(){
@@ -125,12 +125,13 @@ function randomIntFromInterval() { // min and max included
 
 
 function setColor(){
-
+	app.style.color = "white";
 
 	if(app.style.backgroundColor == "red"){
 		app.style.backgroundColor = "green";
 	}else{
 		app.style.backgroundColor = "red";
+	
 	}
 
 }
