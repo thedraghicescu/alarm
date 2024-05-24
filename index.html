@@ -34,53 +34,70 @@
 
 <div id="app" onclick="clearScreen();">
 <div class="container">
-	<input type="text" placeholder="message" id="myMessage"/>
-<input type="text" placeholder="min" id="minTime" value="60"/>	
-<input type="text" placeholder="max" id="maxTime" value="120"/>	
-	<button id="button" onclick="setContent();">Set message</button>
-		
-		
-	<div id="screen">
-		<h1 id="message">Message</h1>
+	<div id ="controls">
+		<input type="text" placeholder="message" id="messageInput" value="Breath! Are you stuck inside the loop?"/>
+		<input type="text" placeholder="min" id="minInput" value="60"/>	
+		<input type="text" placeholder="max" id="maxInput" value="120"/>	
+		<button onclick="Setup()" id="messageSetter">Set message</button>
 	</div>
+
+		<h2 id="message">Breath! Are you stuck inside the loop?</h2>
+
 </div>
 </div>
 
 <script>
-var message = document.getElementById("message").textContent;
-var min = parseInt (document.getElementById("minTime").value);
-var max = parseInt(document.getElementById("maxTime").value);
-var choice  = randomIntFromInterval();
-let app = document.getElementById("app");
-var level = 0;
+var message = "Breath! Are you stuck inside the loop?";
+var min = 60;
+var max = 120;
+var choice  = -1;
+
+var defaultColors = {
+	foreground:"black",
+	background:"white"
+}
+var mainColors = {
+	foreground:"white",
+	background:"red"
+}
+var secondaryColors = {
+	foreground:"black",
+	background:"greenyellow"
+}
+
 var audio = new Audio('beep.mp3');
-document.getElementById("myMessage").value = message;
+
+var app = document.getElementById("app");
+var controls = document.getElementById("controls");
+var messageInput = document.getElementById("messageInput");
+var minInput = document.getElementById("minInput");
+var maxInput = document.getElementById("maxInput");
+var messageSetter = document.getElementById("messageSetter");
+
+var messageDisplay = document.getElementById("message");
+
+
+function Setup(){
+	message = messageInput.value;
+	min = parseInt( minInput.value);
+	max = parseInt( maxInput.value);
 
 
 
+	controls.style.display = "none";
+	messageDisplay.textContent = message;
+	
 
-function setContent(){
-var messenger = document.getElementById("myMessage");
-message = messenger.value;
-
-var minTime  = document.getElementById("minTime");
-min = parseInt( minTime.value);
-
-var maxTime  = document.getElementById("maxTime");
-max = parseInt( maxTime.value);
-
-messenger.style.display = "none";
-minTime.style.display = "none";
-maxTime.style.display = "none";
-document.getElementById("message").textContent = message;
-document.getElementById("button").style.display = "none";
-setInterval(onTick,1000);
-toggleFullscreen("#app");
+	setInterval(onTick,1000);
+	toggleFullscreen();
 }
 
 
-function toggleFullscreen(id) {
-  let elem = document.querySelector(id);
+
+
+
+function toggleFullscreen() {
+  let elem = document.querySelector("#app");
 
   if (!document.fullscreenElement) {
     elem.requestFullscreen().catch(err => {
@@ -92,9 +109,9 @@ function toggleFullscreen(id) {
 }
 
 function clearScreen(){
-console.log("clicking");
-	app.style.backgroundColor = "white";
-		app.style.color = "black";
+
+	app.style.backgroundColor = defaultColors.background;
+	app.style.color = defaultColors.foreground;
 }
 
 function onTick(){
@@ -113,7 +130,6 @@ function beep(){
 
 	setColor();
 	audio.play();
-	level++;
 }
 
 
@@ -125,13 +141,14 @@ function randomIntFromInterval() { // min and max included
 
 
 function setColor(){
-	app.style.color = "white";
+	let cur = app.style.backgroundColor;
 
-	if(app.style.backgroundColor == "red"){
-		app.style.backgroundColor = "green";
+	if(cur == mainColors.background){
+		app.style.backgroundColor = secondaryColors.background;
+		app.style.color = secondaryColors.foreground;
 	}else{
-		app.style.backgroundColor = "red";
-	
+		app.style.backgroundColor = mainColors.background;
+		app.style.color = mainColors.foreground;
 	}
 
 }
