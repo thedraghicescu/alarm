@@ -1,0 +1,129 @@
+<html>
+<head>
+    <title>Alarm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="skeleton.css">
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #app {
+            min-height: 100%; 
+        }
+		#message{
+			position: fixed; /* or absolute */
+			  top: 50%;
+			  left: 50%;
+			  /* bring your own prefixes */
+			  transform: translate(-50%, -50%);
+		}
+    </style>
+    <!--[if lte IE 6]>
+    <style type="text/css">
+        #container {
+            height: 100%;
+        }
+    </style>
+    <![endif]-->
+</head>
+<body>
+
+
+<div id="app" onclick="clearScreen();">
+<div class="container">
+	<input type="text" placeholder="message" id="myMessage"/>
+<input type="text" placeholder="min" id="minTime" value="3"/>	
+<input type="text" placeholder="max" id="maxTime" value="6"/>	
+	<button id="button" onclick="setContent();">Set message</button>
+		
+		
+	<div >
+		<h1 id="message">Message</h1>
+	</div>
+</div>
+</div>
+
+<script>
+var message = document.getElementById("message").textContent;
+var min = parseInt (document.getElementById("minTime").value);
+var max = parseInt(document.getElementById("maxTime").value);
+var choice  = randomIntFromInterval();
+let app = document.getElementById("app");
+var level = 0;
+var audio = new Audio('beep.mp3');
+document.getElementById("myMessage").value = message;
+
+
+
+
+function setContent(){
+var messenger = document.getElementById("myMessage");
+message = messenger.value;
+
+var minTime  = document.getElementById("minTime");
+min = parseInt( minTime.value);
+
+var maxTime  = document.getElementById("maxTime");
+max = parseInt( maxTime.value);
+
+messenger.style.display = "none";
+minTime.style.display = "none";
+maxTime.style.display = "none";
+document.getElementById("message").textContent = message;
+document.getElementById("button").style.display = "none";
+setInterval(onTick,1000);
+
+}
+
+
+function clearScreen(){
+console.log("clicking");
+	app.style.backgroundColor = "white";
+	
+}
+
+function onTick(){
+
+	choice--;
+	if(choice <= 0){
+		choice  = randomIntFromInterval();
+		beep();
+	}
+	
+	
+	
+}
+
+function beep(){
+
+	setColor();
+	audio.play();
+	level++;
+}
+
+
+
+function randomIntFromInterval() { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
+
+function setColor(){
+
+
+	if(app.style.backgroundColor == "red"){
+		app.style.backgroundColor = "green";
+	}else{
+		app.style.backgroundColor = "red";
+	}
+
+}
+
+</script>
+</body>
+
+</html>
