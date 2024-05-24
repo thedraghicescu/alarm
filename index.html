@@ -35,12 +35,12 @@
 <div id="app" onclick="clearScreen();">
 <div class="container">
 	<input type="text" placeholder="message" id="myMessage"/>
-<input type="text" placeholder="min" id="minTime" value="3"/>	
-<input type="text" placeholder="max" id="maxTime" value="6"/>	
+<input type="text" placeholder="min" id="minTime" value="60"/>	
+<input type="text" placeholder="max" id="maxTime" value="100"/>	
 	<button id="button" onclick="setContent();">Set message</button>
 		
 		
-	<div >
+	<div id="screen">
 		<h1 id="message">Message</h1>
 	</div>
 </div>
@@ -75,9 +75,21 @@ maxTime.style.display = "none";
 document.getElementById("message").textContent = message;
 document.getElementById("button").style.display = "none";
 setInterval(onTick,1000);
-
+toggleFullscreen("#app");
 }
 
+
+function toggleFullscreen(id) {
+  let elem = document.querySelector(id);
+
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
 
 function clearScreen(){
 console.log("clicking");
