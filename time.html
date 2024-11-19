@@ -1,0 +1,182 @@
+<html>
+<head>
+    <title>Alarm</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="skeleton.css">
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            margin: 0;
+			
+        }
+
+        #app {
+            min-height: 100%;
+	
+        }
+		#message{
+			position: fixed; /* or absolute */
+			  top: 50%;
+			  left: 50%;
+			  /* bring your own prefixes */
+			  transform: translate(-50%, -50%);
+				text-align: center;
+		}
+    </style>
+    <!--[if lte IE 6]>
+    <style type="text/css">
+        #container {
+            height: 100%;
+        }
+    </style>
+    <![endif]-->
+</head>
+<body>
+
+
+<div id="app" onclick="clearScreen();">
+<div class="container">
+	<div id ="controls">
+		<input type="text" placeholder="message" id="messageInput" value="Breath! Are you stuck inside the loop?"/>
+		<input type="text" placeholder="min" id="minInput" value="60"/>	
+		<input type="text" placeholder="max" id="maxInput" value="120"/>	
+		<button onclick="Setup()" id="messageSetter">Set message</button>
+	</div>
+
+		<h2 id="message">Breath! Are you stuck inside the loop?</h2>
+
+</div>
+</div>
+
+<script>
+var message = "Breath! Are you stuck inside the loop?";
+var min = 60;
+var max = 120;
+var choice  = -1;
+
+var defaultColors = {
+	foreground:"white",
+	background:"black"
+}
+var mainColors = {
+	foreground:"white",
+	background:"red"
+}
+var secondaryColors = {
+	foreground:"black",
+	background:"greenyellow"
+}
+
+var audio = new Audio('beep.mp3');
+
+var app = document.getElementById("app");
+var controls = document.getElementById("controls");
+var messageInput = document.getElementById("messageInput");
+var minInput = document.getElementById("minInput");
+var maxInput = document.getElementById("maxInput");
+var messageSetter = document.getElementById("messageSetter");
+
+var messageDisplay = document.getElementById("message");
+
+var hasStarted = false;
+var lastTime = new Date();
+
+function Setup(){
+	message = messageInput.value;
+	min = parseInt( minInput.value);
+	max = parseInt( maxInput.value);
+
+	lastTime = new Date();
+
+	controls.style.display = "none";
+	messageDisplay.textContent = message;
+	
+
+	setInterval(onTick,1000);
+	toggleFullscreen();
+	hasStarted = true;
+}
+
+
+
+
+
+function toggleFullscreen() {
+  let elem = document.querySelector("#app");
+
+  if (!document.fullscreenElement) {
+    elem.requestFullscreen().catch(err => {
+      alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+function clearScreen(){
+
+	if(!hasStarted) return;
+	
+	lastTime = new Date();
+
+	app.style.backgroundColor = defaultColors.background;
+	app.style.color = defaultColors.foreground;
+	messageDisplay.textContent = "";
+}
+
+function onTick(){
+	messageDisplay.textContent =  getTime();
+	choice--;
+	if(choice <= 0){
+		choice  = randomIntFromInterval();
+		beep();
+	}
+	
+	
+	
+}
+
+function getTime(){
+	const now = new Date();
+	var timeDiff = now - lastTime;
+	
+	return new Date(timeDiff).toISOString().slice(11, 19);
+	
+	
+	
+}
+
+
+function beep(){
+	messageDisplay.textContent = message;
+	//setColor();
+	audio.play();
+	
+}
+
+
+
+function randomIntFromInterval() { // min and max included 
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
+
+function setColor(){
+	let cur = app.style.backgroundColor;
+
+	if(cur == mainColors.background){
+		app.style.backgroundColor = secondaryColors.background;
+		app.style.color = secondaryColors.foreground;
+	}else{
+		app.style.backgroundColor = mainColors.background;
+		app.style.color = mainColors.foreground;
+	}
+
+}
+
+</script>
+</body>
+
+</html>
